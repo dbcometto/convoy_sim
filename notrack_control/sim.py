@@ -22,7 +22,7 @@ class LEADER_MODES(IntEnum):
 num_followers = 4
 sit_time = 2
 
-leader_mode = LEADER_MODES.RANDOM
+leader_mode = LEADER_MODES.CIRCLE
 leader_delta = math.pi/12
 leader_vel = 0.8
 
@@ -279,7 +279,7 @@ try:
                 ey_world = veh.y + s*ekf.x[0] + c*ekf.x[1]
                 theta_world = veh.theta + ekf.x[2]
                 ax.plot(ex_world, ey_world, marker='+', linestyle="", color=colors[veh.id], label=f"veh {ekf.target_id} from veh {ekf.veh_id}")
-                ax.annotate("", xytext=(ex_world, ey_world), xy=(ex_world+arrow_len*math.cos(theta_world), ey_world+arrow_len*math.sin(theta_world)), arrowprops=dict(arrowstyle="->"))
+                ax.annotate("", xytext=(ex_world, ey_world), xy=(ex_world+arrow_len*math.cos(theta_world), ey_world+arrow_len*math.sin(theta_world)), arrowprops=dict(arrowstyle="->", color=colors[veh.id]))
 
             for id,mpc in controllers.items():
                 veh = vehicles[id]
