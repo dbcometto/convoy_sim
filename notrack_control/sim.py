@@ -90,8 +90,8 @@ nprandom = np.random.default_rng(seed=2025)
 
 colors = {0: "#0DFF86", 1: "#FF520D", 2: "#00FFD5", 3: "#D9FF00", 4: "#F705F7", 5: "#00CE0A"}
 plt.ion()
-fig, ax = plt.subplots(figsize=(8,8))
-fig.tight_layout()
+fig, ax = plt.subplots(figsize=(8,4))
+# fig.tight_layout()
 
 trails = {id: deque(maxlen=10000) for id in vehicles}
 
@@ -294,7 +294,8 @@ try:
             ax.set_xlim(-world_size, world_size)
             ax.set_ylim(-world_size, world_size)
             ax.set_title("Simulator")
-            ax.legend()
+            ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0)
+            fig.tight_layout(rect=[0, 0, 0.75, 1])
             plt.pause(0.001)
 
             if not plt.get_fignums():
