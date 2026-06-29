@@ -159,8 +159,8 @@ for i,veh in enumerate(vehicle_list):
 # fig.supxlabel(f"x (m)")
 # fig.supylabel(f"y (m)")
 
-axs[0,0].set_ylabel("Convoy")
-axs[1,0].set_ylabel("Teleop")
+# axs[0,0].set_ylabel("Convoy")
+# axs[1,0].set_ylabel("Teleop")
 
 fig.colorbar(sc, ax=axs, label="Elapsed time (s)", orientation='vertical', location='right', shrink=0.9)
 
