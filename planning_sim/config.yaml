@@ -1,0 +1,82 @@
+# All tunable parameters for planning_sim.
+# Keys ending in `_deg` are converted to radians on load and read in code as `_rad`.
+# `output_file` and `map.folder` are relative to this file; a map folder holds `<name>.png` and `<name>.yaml`, named after the folder.
+
+run:
+  do_save_results: true
+  output_file: data/results.npz
+
+map:
+  folder: maps/obstacle1_map  # a folder under maps/ (flat_map, obstacle1_map)
+
+start:
+  x: -4.0  # m
+  y: -4.0  # m
+  theta_deg: 45  # world frame
+
+goal:
+  x: 4.0  # m
+  y: 4.0  # m
+
+# TODO: costmap values are placeholders until that stage is implemented.
+terrain:
+  window_size_m: 0.25  # m, side length of the plane-fit window (gradient, roughness, curvature); rounded to an odd cell count
+  min_support: 0.5  # fraction of the window that must be valid, else the fit layers are NaN
+
+driveability:
+  heading_bins: 16  # evenly spaced over 360 deg from 0 (world +x); must be even
+
+vehicle:
+  footprint_length: 0.5  # m, along the heading
+  footprint_width: 0.35  # m, across the heading
+  footprint_margin: 0.05  # m, safety inflation on every side of the footprint
+  clearance: 0.1  # m, ground to underbody
+  height: 0.3  # m, ground to top
+  # NOTE: height is not checked in the driveability stage; it is used to make the 2.5D map in the first place
+  max_pitch_deg: 25  # slope along the heading
+  max_roll_deg: 15  # slope across the heading; lower than pitch since sideways tipping comes first
+  max_step_height: 0.1  # m, largest rise or drop to a neighboring cell
+  max_roughness: 0.05  # m, RMS residual of the local plane fit
+
+costmap:
+  w_slope: 1.0
+  w_roughness: 1.0
+  w_obstacle_distance: 1.0
+
+planner:
+  method: STRAIGHT_LINE  # TODO: placeholder until a real planner exists
+
+speed_profile:
+  vel_max: 0.8  # m/s
+  accel_lateral_max: 0.5  # m/s^2
+
+plot:
+  fig_size: [10, 5.5]  # in, (width, height)
+  controls_width_ratios: [1.6, 4]  # layer and toggle controls versus the map
+  controls_height_ratios: [3, 1, 2]  # layer list, toggle box, and heading controls
+  heading_left_key: left  # keyboard: previous heading bin (heading layer only)
+  heading_right_key: right  # keyboard: next heading bin (heading layer only)
+  heading_height_ratios: [1, 3]  # heading slider versus the compass
+  heading_label_position: [0.5, 1.3]  # axes fraction of the slider label
+  compass_color: "#F7052D"
+  compass_width: 2
+  compass_limit: 1.3  # compass axes half-width, in circle radii
+  control_font_size: 9
+  layer_up_key: up  # keyboard: previous layer
+  layer_down_key: down  # keyboard: next layer
+  trajectory_key: t  # keyboard: toggle the trajectory
+  do_show_trajectory: true  # initial state of the toggle
+  grid_key: g  # keyboard: toggle the grid
+  do_show_grid: false  # initial state of the toggle
+  grid_color: "#000000"
+  grid_width: 0.5
+  flat_layer_margin: 0.5  # color scale half-width used when a layer is constant
+  trajectory_color: "#F7052D"
+  trajectory_width: 2
+  start_color: "#2BFF60"
+  goal_color: "#002FFF"
+  marker_size: 8
+  legend_loc: upper center  # which point of the legend sits at legend_anchor
+  legend_anchor: [0.5, -0.1]  # axes fraction; just below the map, under the x label
+  legend_columns: 3
+  legend_font_size: 8

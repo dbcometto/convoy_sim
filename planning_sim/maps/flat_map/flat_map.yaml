@@ -1,0 +1,6 @@
+# Metadata for flat_map.png (gray 0..255 maps linearly to height_min_m..height_max_m, dark = low).
+# NOTE: placeholder scale, chosen so the ground gray (195) sits at 0 m.
+cell_size_m: 0.05  # m, xy size of one pixel
+height_min_m: -0.765  # m, height of gray 0
+height_max_m: 0.235  # m, height of gray 255
+origin_px: [128, 128]  # [x, y] pixel (from the image's top left) that is world (0, 0); world +x is right, +y is up

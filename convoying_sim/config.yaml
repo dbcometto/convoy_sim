@@ -1,0 +1,97 @@
+# All tunable parameters for convoying_sim.
+# Keys ending in `_deg` are converted to radians on load and read in code as `_rad`.
+# `output_file` is relative to this file.
+
+run:
+  visualization_mode: LIVE  # LIVE (draw every step, paced to real time) or END_PLOT (run fast, plot at the end)
+  do_save_results: true
+  output_file: data/results.npz
+  live_min_pause: 0.001  # s, lets the live window process events even when the step is slow
+  progress_bar_width: 30  # characters
+  do_debug_print: false
+
+sim:
+  duration: 60  # s of simulated time
+  dt: 0.1  # s
+  seed: 2025
+  num_followers: 4
+  following_distance: 1.0  # m
+  start_y: -1  # m, all vehicles start in a line along x
+  sit_time: 2  # s, creep forward so the estimators converge before control starts
+  sit_vel: 0.005  # m/s
+  max_past_poses: 10000
+  lateral_window: 200  # segments searched on each side of the last matched segment
+  path_prefix_margin: 1.0  # m, extra length of the hidden path extension behind the leader's start
+  do_enable_crosstalk: true
+
+leader:
+  mode: RANDOM  # MANUAL (arrow keys, LIVE only), CIRCLE, or RANDOM
+  delta_deg: 15  # steering, circle mode
+  vel: 0.8  # m/s, circle speed and random speed upper bound
+  period: 4.0  # s, between random commands
+  resample_window: 0.2  # s, at the start of each period during which a new random command is drawn
+  max_angle_deg: 18  # random steering bound
+
+manual:
+  vel_step: 0.1  # m/s per key press
+  vel_max: 1.0  # m/s
+  delta_step_deg: 15  # per key press
+  delta_max_deg: 45
+
+vehicle:
+  wheelbase: 0.33  # m, shared by the vehicle, EKF, and MPC models
+
+sensors:
+  lidar_noise_x: 0.05  # m, also the EKF measurement noise
+  lidar_noise_y: 0.05  # m
+  pozyx_noise_r: 0.05  # m, range
+  lidar_fov_deg: 160
+  do_drop_lidar: false
+  do_drop_pozyx: false
+
+ekf:
+  # Process noise rates, per second of elapsed time (the EKF scales Q by dt).
+  # NOTE: 0.3 /s at 0.1 s steps matches the old errorplot tuning, which added Q three times per step (0.01 each)
+  q_x: 0.3
+  q_y: 0.3
+  q_theta: 0.3
+  q_vel: 0.3
+
+mpc:
+  horizon: 10  # steps
+  target_method: offhooked  # linear, hitch, curved, or offhooked
+  degenerate_denominator: 1.0e-6  # below this the 'curved' circle is a straight line
+  w_x: 1.0
+  w_y: 1.0
+  w_theta: 1.0
+  w_vel: 0.01
+  w_delta: 0.03
+  vel_min: 0  # m/s
+  vel_max: 1  # m/s
+  delta_min_deg: -45
+  delta_max_deg: 45
+  ahead_angle_deg: 90  # target bearing beyond this is unreachable (can't reverse)
+
+plot:
+  fig_size: [8.55, 4.75]  # in, (width, height)
+  metrics_width_ratios: [1.3, 1]  # world view versus metric plots
+  vehicle_colors: ["#FF960D", "#777777", "#2BFF60", "#002FFF", "#F7052D", "#00CE0A"]  # indexed by vehicle id
+  arrow_len: 0.25  # m
+  world_size: 2  # m, half-width of the world view when not autoscaling
+  do_autoscale_world: true  # fit the world plot to the paths taken (ignores world_size)
+  autoscale_margin: 0.1  # fractional padding around the paths
+  min_world_half_width: 0.5  # m, so a tiny path doesn't zoom in absurdly
+  time_label_interval: 10  # s, between time labels on the leader's trail
+  time_label_marker_size: 4
+  time_label_font_size: 8
+  time_label_offset: [4, 4]  # points
+  legend_loc: upper left  # which corner of the legend sits at legend_anchor
+  legend_anchor: [1.01, 1]  # axes fraction; just outside the top right of the world view
+  live_right_margin: 0.75  # figure fraction left for the world view, so the live legend fits beside it
+  legend_font_size: 7
+  legend_alpha: 0.7
+  trail_alpha: 0.3
+  fov_alpha: 0.05
+  fov_radius: 2.5  # m
+  do_visualize_lidar_fov: false
+  grid_alpha: 0.3
